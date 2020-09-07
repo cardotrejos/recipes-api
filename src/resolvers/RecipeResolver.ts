@@ -2,6 +2,8 @@ import { Resolver, Query, Mutation, Arg, Field, InputType, Int } from "type-grap
 
 import { Recipe } from '../entity/Recipe'
 
+import { isAuth } from '../isAuth'
+
 @InputType()
 class RecipesInput {
   @Field()

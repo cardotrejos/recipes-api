@@ -2,8 +2,6 @@ import { Resolver, Query, Mutation, Arg, Field, InputType, Int } from "type-grap
 
 import { Recipe } from '../entity/Recipe'
 
-import { isAuth } from '../isAuth'
-
 @InputType()
 class RecipesInput {
   @Field()
@@ -17,6 +15,18 @@ class RecipesInput {
 
   @Field()
   category!: string
+}
+
+@InputType()
+class GetRecipesInput {
+  @Field()
+  name?: string
+
+  @Field(() => String, { nullable: true })
+  ingredients?: string
+
+  @Field(() => String, { nullable: true })
+  category?: string
 }
 
 @InputType()
@@ -42,7 +52,6 @@ export class RecipeResolver {
     @Arg("fields", () => RecipesInput) fields: RecipesInput,
   ) {
     const newRecipe = Recipe.create(fields);
-    console.log(newRecipe)
     return await newRecipe.save()
   }
 
@@ -65,4 +74,16 @@ export class RecipeResolver {
   recipes() {
     return Recipe.find()
   }
+
+  @Query(() => [Recipe])
+  async getOneRecipe(
+    @Arg("fields", () => GetRecipesInput) fields: GetRecipesInput
+  ) {
+    return await Recipe.find(fields)
+  }
+
 }
+
+
+
+
